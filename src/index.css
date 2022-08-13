@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    background-color: hsl(0, 0%, 98%);
+}
+.inputText {
+    background-image: url('./images/icons8-search.jpg');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+    background-position: 2em;
+}
 
 
