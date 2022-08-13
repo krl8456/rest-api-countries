@@ -8,7 +8,7 @@ interface countryProps {
 
 function Country({ flag, name, population, region, capital }: countryProps) {
   return (
-    <div className="flex flex-col shadow pb-12">
+    <div className="flex flex-col shadow pb-12 hover:cursor-pointer">
       <img src={flag} alt="flag" className="h-40 w-full"/>
       <h2 className="font-medium text-2xl m-6">{name}</h2>
       <div className="ml-6">

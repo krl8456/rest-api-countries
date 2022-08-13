@@ -8,25 +8,48 @@ import { MDBSpinner } from "mdb-react-ui-kit";
 
 function App() {
   const [countries, setCountries] = useState<any[]>([]);
+  const [fullCountriesCopy, setFullCountriesCopy] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [inputData, setInputData] = useState({
     searchInput: "",
+    region: "",
   });
-
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
     fetchData();
-    // setCountries((prev) =>
-    //   prev.filter(
-    //     (el) =>
-    //       el.name.common.toLowerCase().indexOf(inputData.searchInput) !== -1
-    //   )
-    // );
+  }, []);
+
+  useEffect(() => {
+    setInputData((prev) => ({
+      ...prev,
+      region: "",
+    }));
+    const countriesFiltered =
+      inputData.searchInput === ""
+        ? fullCountriesCopy
+        : fullCountriesCopy.filter(
+            (el) =>
+              el.name.common
+                .toLowerCase()
+                .indexOf(inputData.searchInput.toLowerCase()) !== -1
+          );
+    setCountries(countriesFiltered);
   }, [inputData.searchInput]);
+
+  useEffect(() => {
+    if (inputData.region !== "") {
+      const countriesFiltered = fullCountriesCopy.filter(
+        (el) => {
+          if (el.region === "Americas") {
+            return el.region === "Americas"
+          }
+          return el.region === inputData.region
+        }
+      );
+      setCountries(countriesFiltered);
+    }
+  }, [inputData.region]);
 
   function fetchData() {
     setLoading(false);
@@ -37,14 +60,10 @@ function App() {
           return res.json();
         } else throw res;
       })
-      .then((data) =>
-        setCountries(
-          data.filter(
-            (el: any) =>
-              el.name.common.toLowerCase().indexOf(inputData.searchInput) !== -1
-          )
-        )
-      )
+      .then((data) => {
+        setCountries(data);
+        setFullCountriesCopy(data);
+      })
       .catch((err) => setError(true));
   }
 
@@ -55,6 +74,8 @@ function App() {
       ...prev,
       [name]: value,
     }));
+
+    console.log(inputData.region);
   };
 
   const countryComponents = countries.map((el) => (
@@ -74,7 +95,10 @@ function App() {
         handleInputChange={handleInputChange}
         searchInput={inputData.searchInput}
       />
-      <DropdownMenu />
+      <DropdownMenu
+        stateValue={inputData.region}
+        handleInputChange={handleInputChange}
+      />
       {/* <MDBSpinner className="relative left-1/2" role="status" >
         <span className="visually-hidden">Loading...</span>
       </MDBSpinner> */}
