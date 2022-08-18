@@ -7,10 +7,15 @@ body {
     background-color: hsl(0, 0%, 98%);
 }
 .inputText {
-    background-image: url('./images/icons8-search.jpg');
+    background-image: url('./images/icons8-search.svg');
     background-repeat: no-repeat;
     background-size: 30px 30px;
     background-position: 2em;
 }
-
-
+.button-shadow {
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+}
+.dark > * {
+    background-color: hsl(207, 26%, 17%);
+    color: white;
+}
