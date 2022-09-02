@@ -13,7 +13,7 @@ function Country({ flag, name, population, region, capital }: countryProps) {
   return (
     <Link
       to={`/${name.replace(/ /g, '')}`}
-      className="flex flex-col shadow pb-12 hover:cursor-pointer text-black no-underline dark:text-white dark:bg-DarkBlue"
+      className="flex flex-col shadow pb-12 hover:cursor-pointer text-black no-underline dark:text-white dark:bg-DarkBlue hover:-translate-y-4 ease-in-out duration-300"
       onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
     >
       <img src={flag} alt="flag" className="h-70 w-full md:h-52" />

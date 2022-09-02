@@ -17,7 +17,7 @@ function App() {
     searchInput: "",
     region: "",
   });
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -40,6 +40,10 @@ function App() {
   }, [inputData.searchInput]);
 
   useEffect(() => {
+    if (inputData.region === "All") {
+      setCountries(fullCountriesCopy);
+      return;
+    }
     if (inputData.region !== "") {
       const countriesFiltered = fullCountriesCopy.filter((el) => {
         if (inputData.region === "America") {
@@ -51,7 +55,7 @@ function App() {
     }
   }, [inputData.region]);
 
-  function fetchData() {
+  const fetchData = () => {
     setLoading(false);
     fetch("https://restcountries.com/v3.1/all")
       .then((res) => {
@@ -65,7 +69,7 @@ function App() {
         setFullCountriesCopy(data);
       })
       .catch((err) => setError(true));
-  }
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -74,9 +78,13 @@ function App() {
       ...prev,
       [name]: value,
     }));
+  };
 
-    console.log(inputData.region);
-    
+  const handleSelect = (value: string) => {
+    setInputData((prev) => ({
+      ...prev,
+      region: value,
+    }));
   };
 
   const countryComponents = countries.map((el) => (
@@ -90,8 +98,28 @@ function App() {
     />
   ));
 
-  const countriesRoutes = fullCountriesCopy.map(el => <Route key={uuidv4()} path={`/${el.name.common.replace(/ /g, '')}`} element={<CountryInformations image={el.flags.svg} name={el.name.common} nativeName={el.name.nativeName} population={el.population} region={el.region} subRegion={el.subregion} capital={el.capital} topLevelDomain={el.tld} currencies={el.currencies} languages={el.languages} borderCountries={el.borders} countries={fullCountriesCopy}/>}/>)
-
+  const countriesRoutes = fullCountriesCopy.map((el) => (
+    <Route
+      key={uuidv4()}
+      path={`/${el.name.common.replace(/ /g, "")}`}
+      element={
+        <CountryInformations
+          image={el.flags.svg}
+          name={el.name.common}
+          nativeName={el.name.nativeName}
+          population={el.population}
+          region={el.region}
+          subRegion={el.subregion}
+          capital={el.capital}
+          topLevelDomain={el.tld}
+          currencies={el.currencies}
+          languages={el.languages}
+          borderCountries={el.borders}
+          countries={fullCountriesCopy}
+        />
+      }
+    />
+  ));
 
   return (
     <>
@@ -108,29 +136,34 @@ function App() {
               />
               <DropdownMenu
                 stateValue={inputData.region}
-                handleInputChange={handleInputChange}
+                handleSelect={handleSelect}
               />
               {loading ? (
-                <div className="px-8 grid mt-36 gap-8 md:gap-20 md:px-20 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 pb-20">
+                <div className="px-8 grid mt-12 md:mt-36 gap-8 md:gap-20 md:px-20 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 pb-20">
                   {countryComponents}
                 </div>
+              ) : error ? (
+                <p className="text-red-600 italic ml-20 mt-12 md:mt-36">Some error occured</p>
               ) : (
-                <MDBSpinner className="absolute left-1/2 top-1/2" role="status">
+                <MDBSpinner
+                  className="absolute left-1/2 md:top-1/2 top-2/3"
+                  role="status"
+                >
                   <span className="visually-hidden">Loading...</span>
                 </MDBSpinner>
               )}
-              
+              {JSON.stringify(countries) === JSON.stringify([]) &&
+                inputData.searchInput !== "" && (
+                  <p className="dark:text-white ml-20 -mt-24 italic">
+                    No countries found
+                  </p>
+                )}
             </>
           }
         />
-      
-      {countriesRoutes}
-      </Routes>
 
-      {/* <MDBSpinner className="relative left-1/2" role="status" >
-        <span className="visually-hidden">Loading...</span>
-      </MDBSpinner> */}
-      {/* {error && <p className="text-red-600 block mx-auto">Check your internet connection</p>} */}
+        {countriesRoutes}
+      </Routes>
     </>
   );
 }

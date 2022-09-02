@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
 interface CountryInformationsProps {
   image: string;
@@ -44,12 +44,11 @@ function CountryInformations({
   borderCountries,
   countries,
 }: CountryInformationsProps) {
-  const navigate = useNavigate();
   return (
     <>
-      <button
-        onClick={() => navigate(-1)}
-        className="button-shadow flex justify-center items-center w-32 h-10 gap-2 ml-[5%] mt-12 dark:bg-DarkBlue"
+      <Link
+        to="/"
+        className="button-shadow flex justify-center items-center w-32 h-10 gap-2 ml-[5%] mt-12 dark:bg-DarkBlue text-black no-underline dark:!text-white"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -66,7 +65,7 @@ function CountryInformations({
           />
         </svg>
         <p className="mt-2.5 opacity-80">Back</p>
-      </button>
+      </Link>
       <div className="lg:grid lg:grid-cols-[1fr_1fr] lg:ml-[5%] lg:grid-row-1 relative">
         <img
           src={image}
@@ -128,7 +127,7 @@ function CountryInformations({
                 borderCountries.map((el) => (
                   <Link
                     key={uuidv4()}
-                    className="px-4 py-1 border-2 text-black no-underline whitespace-nowrap dark:border-DarkBlue dark:bg-DarkBlue dark:!text-white opacity-80"
+                    className="px-4 py-1 border-2 text-black no-underline whitespace-nowrap dark:border-DarkBlue dark:bg-DarkBlue dark:!text-white opacity-80 hover:-translate-y-1 ease-in-out duration-300"
                     to={`/${countries
                       .find((c) => c.cca3 === el)
                       ?.name?.common.replace(/ /g, "")}`}

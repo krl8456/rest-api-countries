@@ -5,12 +5,12 @@ import { v4 as uuidv4 } from "uuid";
 
 interface DropdownMenuProps {
   stateValue: string;
-  handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void;
+  handleSelect(value: string): void;
 }
 
-function DropdownMenu({ stateValue, handleInputChange }: DropdownMenuProps) {
+function DropdownMenu({ stateValue, handleSelect }: DropdownMenuProps) {
   const [isSelectBarClicked, setIsSelectBarClicked] = useState(false);
-  const countries = ["Africa", "America", "Asia", "Europe", "Oceania"];
+  const countries = ["All", "Africa", "America", "Asia", "Europe", "Oceania"];
   const selectRef = useRef<HTMLDivElement>(null);
 
   const toggleSelect = () => {
@@ -40,18 +40,7 @@ function DropdownMenu({ stateValue, handleInputChange }: DropdownMenuProps) {
       {isSelectBarClicked && (
         <div className="mt-2 flex flex-col shadow rounded pl-6 box-border py-6 gap-3 bg-white dark:!bg-DarkBlue">
           {countries.map((country) => (
-            <React.Fragment key={uuidv4()}>
-              <label htmlFor={country} className="cursor-pointer hover:text-gray-500 hover:cursor-pointer">{country}</label>
-              <input
-                type="radio"
-                id={country}
-                name="region"
-                className="hidden"
-                value={country}
-                checked={stateValue === country}
-                onChange={handleInputChange}
-              />
-            </React.Fragment>
+            <p key={uuidv4()} className="cursor-pointer hover:text-gray-500 hover:cursor-pointer mb-0" onClick={() => handleSelect(country)}>{country}</p>
           ))}
         </div>
       )}
